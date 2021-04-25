@@ -14,12 +14,31 @@
 
 
 <div class="container-fluid mt-3" id="app">
-    <input type="text" class="form-control" v-model="criterioDeBusqueda"
-        placeholder="Ingresar un criterio de busqueda...">
+    <div>
+    <input type="text" class="form-control" id="primero" v-model="criterioDeBusqueda"
+        placeholder="Ingresar un nombre">
     <br>
+    <input type="number" class="form-control" id="segundo" v-model="criterioDeBusqueda"
+        placeholder="Ingresar un DNI">
+    </div>
+
     <div class="card-deck m-0">
         <div class="row">
-            <div class="col" v-for="persona in personasFiltradas">
+            <div class="col" v-for="persona in personasFiltradasPorNombre">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{getNombreCompleto(persona)}}</h5>
+                        <p class="card-text">dni {{persona.dni}}</p>
+                        <a href="#" class="card-link">{{persona.correo}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-deck m-0">
+        <div class="row">
+            <div class="col" v-for="persona in personasFiltradasPorDNI">
                 <div class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title">{{getNombreCompleto(persona)}}</h5>
@@ -337,13 +356,31 @@
                 return this.personas.filter((persona) => {
                     let registroCompleto = `${persona.nombre} ${persona.apellido} ${persona.dni} ${persona.correo}`
                     return registroCompleto.toLowerCase().includes(this.criterioDeBusqueda.toLowerCase())
-                });
+                })
+            },
+
+            personasFiltradasPorNombre() {
+                return this.personas.filter((persona) => {
+                    let registroNombre = `${persona.nombre} ${persona.apellido}`
+                    return registroNombre.toLowerCase().includes(this.criterioDeBusqueda.toLowerCase());
+                })
+            }, 
+
+            personasFiltradasPorDNI() {
+                return this.personas.filter((persona) => {
+                    let registroDNI = `${persona.dni}`
+                    return registroDNI.toLowerCase().includes(this.criterioDeBusqueda.toLowerCase());
+                })
+
             }
+
         },
         methods: {
             getNombreCompleto(persona) {
                 return `${persona.nombre} ${persona.apellido}`
             }
+
+           
         }
     });
 </script>
